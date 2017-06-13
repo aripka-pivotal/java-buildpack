@@ -16,4 +16,4 @@
 # Configuration for the Dynatrace SaaS/Managed framework
 ---
 version: 1.+
-repository_root: https://jar-host.apps.pivotalmn.com/paasInstaller_Unix_64.zip
+repository_root: http://jar-host.apps.pivotalmn.com/paasInstaller_Unix_64.zip
