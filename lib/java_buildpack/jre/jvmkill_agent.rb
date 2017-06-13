@@ -31,16 +31,16 @@ module JavaBuildpack
           FileUtils.cp(file.path, jvmkill_agent)
           jvmkill_agent.chmod 0o755
         end
+
+        if @application.services.one_volume_service? FILTER
+          puts "       Writing terminal heap dumps to #{heap_dump_path}"
+        end
       end
 
       # (see JavaBuildpack::Component::BaseComponent#release)
       def release
-        properties = { 'printHeapHistogram' => '1' }
-
-        if @application.services.one_volume_service? FILTER
-          properties['heapDumpPath'] = "#{container_dir}/#{space_identifier}/#{application_identifier}/" \
-                                       "#{instance_identifier}.hprof"
-        end
+        properties                 = { 'printHeapHistogram' => '1' }
+        properties['heapDumpPath'] = heap_dump_path if @application.services.one_volume_service? FILTER
 
         @droplet.java_opts.add_agentpath_with_props(jvmkill_agent, properties)
       end
@@ -64,6 +64,10 @@ module JavaBuildpack
 
       def container_dir
         @application.services.find_service(FILTER)['volume_mounts'].first['container_dir']
+      end
+
+      def heap_dump_path
+        "#{container_dir}/#{space_identifier}/#{application_identifier}/" \ "#{instance_identifier}.hprof"
       end
 
       def instance_identifier
