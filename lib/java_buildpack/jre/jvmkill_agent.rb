@@ -35,7 +35,14 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::BaseComponent#release)
       def release
-        @droplet.java_opts.add_agentpath_with_props(jvmkill_agent, 'printHeapHistogram' => '1')
+        properties = { 'printHeapHistogram' => '1' }
+
+        if @application.services.one_volume_service? FILTER
+          properties['heapDumpPath'] = "#{container_dir}/#{space_identifier}/#{application_identifier}/" \
+                                       "#{instance_identifier}.hprof"
+        end
+
+        @droplet.java_opts.add_agentpath_with_props(jvmkill_agent, properties)
       end
 
       protected
@@ -47,8 +54,28 @@ module JavaBuildpack
 
       private
 
+      FILTER = /heap-dump/
+
+      private_constant :FILTER
+
+      def application_identifier
+        "#{@application.details['application_name']}-#{@application.details['application_id']}"
+      end
+
+      def container_dir
+        @application.services.find_service(FILTER)['volume_mounts'].first['container_dir']
+      end
+
+      def instance_identifier
+        '$CF_INSTANCE_INDEX-%FT%T%z-$CF_INSTANCE_GUID'
+      end
+
       def jvmkill_agent
         @droplet.sandbox + "bin/jvmkill-#{@version}"
+      end
+
+      def space_identifier
+        "#{@application.details['space_name']}-#{@application.details['space_id']}"
       end
 
     end
