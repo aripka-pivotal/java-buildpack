@@ -115,7 +115,6 @@ module JavaBuildpack
         download_uri = "#{api_base_url}/v1/deployment/installer/agent/unix/paas/latest?include=java&bitness=64&"
         download_uri += "Api-Token=#{credentials[APITOKEN]}"
         ['latest', download_uri]
-        download_uri = "https://jar-host.apps.pivotalmn.com/paasInstaller_Unix_64.zip"
       end
 
       def api_base_url
