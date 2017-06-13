@@ -32,9 +32,7 @@ module JavaBuildpack
           jvmkill_agent.chmod 0o755
         end
 
-        if @application.services.one_volume_service? FILTER
-          puts "       Writing terminal heap dumps to #{heap_dump_path}"
-        end
+        puts "       Write terminal heap dumps to #{heap_dump_path}" if @application.services.one_volume_service? FILTER
       end
 
       # (see JavaBuildpack::Component::BaseComponent#release)
