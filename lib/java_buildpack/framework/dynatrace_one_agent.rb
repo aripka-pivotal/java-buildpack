@@ -38,6 +38,8 @@ module JavaBuildpack
         JavaBuildpack::Util::Cache::InternetAvailability.instance.available(
           true, 'The Dynatrace One Agent download location is always accessible'
         ) do
+          print @version
+          print @uri
           download(@version, @uri) { |file| expand file }
         end
 
