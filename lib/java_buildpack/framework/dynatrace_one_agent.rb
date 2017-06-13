@@ -38,8 +38,6 @@ module JavaBuildpack
         JavaBuildpack::Util::Cache::InternetAvailability.instance.available(
           true, 'The Dynatrace One Agent download location is always accessible'
         ) do
-          print @version
-          print @uri
           download(@version, @uri) { |file| expand file }
         end
 
@@ -114,6 +112,7 @@ module JavaBuildpack
 
       def agent_download_url
         credentials = @application.services.find_service(FILTER)['credentials']
+        print api_base_url
         download_uri = "#{api_base_url}/v1/deployment/installer/agent/unix/paas/latest?include=java&bitness=64&"
         download_uri += "Api-Token=#{credentials[APITOKEN]}"
         ['latest', download_uri]
