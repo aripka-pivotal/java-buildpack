@@ -67,7 +67,7 @@ module JavaBuildpack
       end
 
       def heap_dump_path
-        "#{container_dir}/#{space_identifier}/#{application_identifier}/" \ "#{instance_identifier}.hprof"
+        "#{container_dir}/#{space_identifier}/#{application_identifier}/#{instance_identifier}.hprof"
       end
 
       def instance_identifier
