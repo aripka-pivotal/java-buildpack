@@ -113,17 +113,16 @@ module JavaBuildpack
       def agent_download_url
         credentials = @application.services.find_service(FILTER)['credentials']
         print api_base_url
-        download_uri = "#{api_base_url}/v1/deployment/installer/agent/unix/paas/latest?include=java&bitness=64&"
-        download_uri += "Api-Token=#{credentials[APITOKEN]}"
-        #download_uri = "http://jar-host.apps.pivotalmn.com/paasInstaller_Unix_64.zip"
+        #download_uri = "#{api_base_url}/v1/deployment/installer/agent/unix/paas/latest?include=java&bitness=64&"
+        #download_uri += "Api-Token=#{credentials[APITOKEN]}"
+        download_uri = "http://jar-host.apps.pivotalmn.com/paasInstaller_Unix_64.zip"
         ['latest', download_uri]
       end
 
       def api_base_url
         credentials = @application.services.find_service(FILTER)['credentials']
         return credentials[APIURL] unless credentials[APIURL].nil?
-#        base_url = credentials[ENDPOINT] || credentials[SERVER] || "https://#{tenant(credentials)}.live.dynatrace.com"
-        base_url = credentials[ENDPOINT] || credentials[SERVER] || "http://#{tenant(credentials)}.live.dynatrace.com"
+        base_url = credentials[ENDPOINT] || credentials[SERVER] || "https://#{tenant(credentials)}.live.dynatrace.com"
         base_url = base_url.gsub('/communication', '').concat('/api').gsub(':8443', '').gsub(':443', '')
         base_url
       end
